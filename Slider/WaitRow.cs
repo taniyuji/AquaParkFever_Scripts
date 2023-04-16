@@ -15,7 +15,7 @@ public class WaitRow : MonoBehaviour
 
     public float getDefaultRowInterval
     {
-       get { return defaultRowInterval; }
+        get { return defaultRowInterval; }
     }
 
     private Subject<PathFollower> _goSlide = new Subject<PathFollower>();
@@ -29,18 +29,9 @@ public class WaitRow : MonoBehaviour
 
     public bool isWaiting => _followerList.Count > 0;
 
-    public float rowInterval { get; private set;}
+    public float rowInterval { get; private set; }
 
     private float goIntervalCounter;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        ResourceProvider.i.informationManager.SliderLevelChanged.Subscribe(i =>
-        {
-            StartCoroutine(ChangeYPosition());
-        });
-    }
 
     // Update is called once per frame
     void Update()
@@ -79,22 +70,20 @@ public class WaitRow : MonoBehaviour
 
         var setPosition = ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition;
 
-        var sliderLeft = ResourceProvider.i.addSliderBehavior.nowLeftSide;
+        var sliderLeft = ResourceProvider.i.addSliderBehavior.nowBackSide;
 
         var fixedRowInterval = rowInterval * sliderLeft;
 
         follower.gameObject.transform.LookAt(setPosition);
-         follower.gameObject.transform.position = setPosition - fixedRowInterval;
+        follower.gameObject.transform.position = setPosition - fixedRowInterval;
 
         rowInterval += defaultRowInterval;
 
         //Debug.Log(rowInterval);
     }
 
-    private IEnumerator ChangeYPosition()
+    public void ChangeYPosition()
     {
-        yield return null;
-
         for (int g = 0; g < _followerList.Count; g++)
         {
             var position = _followerList[g].transform.position;

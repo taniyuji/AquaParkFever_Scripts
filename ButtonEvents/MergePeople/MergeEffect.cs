@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//マージ時のSEや煙エフェクトを制御するスクリプト
 public class MergeEffect : MonoBehaviour
 {
     [SerializeField]

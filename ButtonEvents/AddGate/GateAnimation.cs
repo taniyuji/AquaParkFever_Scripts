@@ -5,15 +5,14 @@ using UniRx;
 using System;
 using DG.Tweening;
 
-public class GateBehavior : MonoBehaviour
+//ゲートのアニメーション周りを制御するスクリプト
+public class GateAnimation : MonoBehaviour
 {
     private int passLevel;
 
     private IncomeUIAnimation incomeUIAnimation;
 
     private Sequence sequence;
-
-    private Vector3 defaultScale = Vector3.zero;
 
     private AudioSource gateSE;
 
@@ -24,8 +23,6 @@ public class GateBehavior : MonoBehaviour
 
     void Start()
     {
-        defaultScale = transform.localScale;
-
         gateSE = GetComponent<AudioSource>();
     }
 
@@ -33,12 +30,13 @@ public class GateBehavior : MonoBehaviour
     {
         sequence = DOTween.Sequence();
 
-        sequence.Append(transform.DOScale(new Vector3(defaultScale.x + 1f, defaultScale.y + 1, defaultScale.z + 1), 0.1f))
-                .Append(transform.DOScale(defaultScale, 0.1f));
+        sequence.Append(transform.DOScale(transform.localScale + Vector3.one, 0.1f))
+                .Append(transform.DOScale(transform.localScale, 0.1f));
     }
-
+    
     void OnTriggerEnter(Collider other)
     {
+        //ゲートを通過したプレイヤーのマージ段階によってお金の増減やドルUIを変更する。
         if (int.TryParse(other.gameObject.tag, out passLevel))
         {
             // Debug.Log("parsedLevel = " + passLevel);
@@ -64,7 +62,7 @@ public class GateBehavior : MonoBehaviour
     {
         sequence = DOTween.Sequence();
 
-        sequence.Append(transform.DOScale(new Vector3(defaultScale.x + 0.3f, defaultScale.y + 0.3f, defaultScale.z + 0.3f), 0.1f))
-                .Append(transform.DOScale(defaultScale, 0.1f));
+        sequence.Append(transform.DOScale(transform.localScale + Vector3.one * 0.3f, 0.1f))
+                .Append(transform.DOScale(transform.localScale, 0.1f));
     }
 }

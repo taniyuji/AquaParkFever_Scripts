@@ -34,9 +34,9 @@ public class ChangeSpeed : MonoBehaviour
     {
         state = SpeedState.Idle;
 
-        defaultSpeed = follower.speed;
-
         follower = GetComponent<PathFollower>();
+
+        defaultSpeed = follower.speed;
     }
 
     // Update is called once per frame

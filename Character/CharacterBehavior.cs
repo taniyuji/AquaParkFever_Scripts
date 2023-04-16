@@ -62,7 +62,7 @@ public class CharacterBehavior : MonoBehaviour
         swimRingBehavior = GetComponent<SwimRingBehavior>();
         animator = GetComponent<Animator>();
         mergeAnimation = GetComponent<MergeAnimation>();
-        poolLadderTransform = ResourceProvider.i.informationManager.poolLadderTransform;
+        poolLadderTransform = ResourceProvider.i.poolLadderTransform;
         climbLadderPosition = ResourceProvider.i.addSliderBehavior.nowClimbLadderPosition;
         basePosition = ResourceProvider.i.addSliderBehavior.nowBaseBackPosition;
         sliderPosition = ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition;
@@ -72,6 +72,7 @@ public class CharacterBehavior : MonoBehaviour
     void OnEnable()
     {
         isMerged = false;
+        follower.enabled = false;
 
         if (!ResourceProvider.i.waitRow.isWaiting)
         {
@@ -98,7 +99,7 @@ public class CharacterBehavior : MonoBehaviour
             }
         });
 
-        ResourceProvider.i.informationManager.SliderLevelChanged.Subscribe((Action<int>)(i =>
+        ResourceProvider.i.addSliderEventController.SliderLevelChanged.Subscribe((Action<int>)(i =>
         {
             if (sequence != null && sequence.IsPlaying())
             {
@@ -118,11 +119,11 @@ public class CharacterBehavior : MonoBehaviour
 
                 sequence = DOTween.Sequence();
 
-                var sliderLeft = ResourceProvider.i.addSliderBehavior.nowLeftSide;
+                var sliderBack = ResourceProvider.i.addSliderBehavior.nowBackSide;
 
                 var defaultRowInterval = ResourceProvider.i.waitRow.getDefaultRowInterval;
 
-                var rowInterval = sliderLeft * defaultRowInterval;
+                var rowInterval = sliderBack * defaultRowInterval;
 
                 sequence.Append(transform.DOMove(transform.position + rowInterval, 0.4f).SetDelay(0.3f));
             }
@@ -248,11 +249,11 @@ public class CharacterBehavior : MonoBehaviour
 
         if (name != AnimationNames.OnSlider)
         {
-            ResourceProvider.i.mergePeopleBehavior.CheckNoOneOnSlider();
+            ResourceProvider.i.peoplePool.CheckNoOneOnSlider();
         }
         else
         {
-            ResourceProvider.i.mergePeopleBehavior.playSE();
+            ResourceProvider.i.peoplePool.playSE();
         }
     }
 

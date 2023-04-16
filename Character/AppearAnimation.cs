@@ -50,7 +50,6 @@ public class AppearAnimation : MonoBehaviour
                 constraintsList[i].weight = 0;
         }
 
-
         sequence.Append(transform.DOScale(new Vector3(defaultScale.x + addScaleAmount,
                                                         defaultScale.y + addScaleAmount,
                                                         defaultScale.z + addScaleAmount)
@@ -68,11 +67,5 @@ public class AppearAnimation : MonoBehaviour
                             constraintsList[i].weight = 1;
                     }
                 });
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

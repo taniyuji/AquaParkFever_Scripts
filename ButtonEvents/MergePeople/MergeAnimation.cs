@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using PathCreation.Examples;
 
+//マージ時のキャラクターのアニメーションを管理するスクリプト
 public class MergeAnimation : MonoBehaviour
 {
     [SerializeField]
@@ -29,12 +30,15 @@ public class MergeAnimation : MonoBehaviour
         swimRing = GetComponent<SwimRingBehavior>();
     }
 
+    //マージされる方かする方かで処理を分ける。
     public void JudgeMerge(bool isBeMerged)
     {
         if(isBeMerged) StartCoroutine(BeMerged());
         else StartCoroutine(Merge());
     }
     
+    //マージする方の場合の処理
+    //キャラをカメラ前まで動かしてキャラのレベルを上げて数秒後にスライダーに戻す。
     public IEnumerator Merge()
     {
         yield return null;
@@ -73,6 +77,8 @@ public class MergeAnimation : MonoBehaviour
                 });
     }
 
+    //マージされる方の処理
+    //される方と衝突する瞬間にActiveをfalseにする。
     public IEnumerator BeMerged()
     {
         yield return null;

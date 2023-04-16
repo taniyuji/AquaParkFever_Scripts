@@ -11,6 +11,9 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI dollarUI;
 
+    [SerializeField]
+    private GateList gateList;
+
     public enum FunctionName
     {
         AddPeople = 0,
@@ -45,41 +48,12 @@ public class UIController : MonoBehaviour
 
         UnSetButton(FunctionName.Income);
 
-        ResourceProvider.i.informationManager.PeopleAmountChanged.Subscribe(i =>
-        {
-            SetCoroutine(FunctionName.AddPeople);
-
-            SetCoroutine(FunctionName.MergePeople);
-        });
-
-        ResourceProvider.i.informationManager.SliderLevelChanged.Subscribe(i =>
-        {
-            SetCoroutine(FunctionName.AddPeople);
-
-            SetCoroutine(FunctionName.Income);
-
-            SetCoroutine(FunctionName.AddSlider);
-        });
-
-        ResourceProvider.i.informationManager.MergedPeople.Subscribe(i =>
-        {
-            SetCoroutine(FunctionName.MergePeople);
-        });
-
-        ResourceProvider.i.informationManager.gateAmountChanged.Subscribe(i =>
-        {
-            SetCoroutine(FunctionName.Income);
-        });
-
         ResourceProvider.i.moneyLimitController.stateChanged.Subscribe(i =>
         {
-            SetCoroutine(FunctionName.AddPeople);
-
-            SetCoroutine(FunctionName.MergePeople);
-
-            SetCoroutine(FunctionName.AddSlider);
-
-            SetCoroutine(FunctionName.Income);
+            SetAddPeople();
+            SetMergePeople();
+            SetAddSlider();
+            SetAddGate();
         });
 
         ResourceProvider.i.informationManager.moneyAmountChanged.Subscribe(i =>
@@ -158,29 +132,20 @@ public class UIController : MonoBehaviour
 
     private void SetCoroutine(FunctionName name)
     {
-        IEnumerator method = SetAddPeople();
-
-        switch (name)
-        {
-            case FunctionName.MergePeople: method = SetMergePeople(); break;
-            case FunctionName.AddSlider: method = SetAddSlider(); break;
-            case FunctionName.Income: method = SetAddGate(); break;
-        }
+        IEnumerator method = null;
 
         StartCoroutine(method);
     }
 
-    private IEnumerator SetAddPeople()
+    public void SetAddPeople()
     {
-        yield return null;
-
         var informationManager = ResourceProvider.i.informationManager;
 
         var mergeCounter = informationManager.mergeCounter;
 
         var peopleAmount = informationManager.peopleAmount;
 
-        if (peopleAmount >= ResourceProvider.i.informationManager.peopleAmountLimit
+        if (peopleAmount >= informationManager.peopleAmountLimit
              || !ResourceProvider.i.moneyLimitController.canAddPeopleState)
         {
             if (buttons[(int)FunctionName.AddPeople].enabled)
@@ -193,7 +158,7 @@ public class UIController : MonoBehaviour
 
         //Debug.Log("peopleAmount = " + peopleAmount + "peopleLimit = " + ResourceProvider.i.informationManager.peopleAmountLimit);
 
-        if (peopleAmount >= ResourceProvider.i.informationManager.peopleAmountLimit)
+        if (peopleAmount >= informationManager.peopleAmountLimit)
         {
             buttonsTextList[(int)FunctionName.AddPeople].text = "Max";
         }
@@ -204,10 +169,8 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private IEnumerator SetMergePeople()
+    public void SetMergePeople()
     {
-        yield return null;
-
         var mergeCounter = ResourceProvider.i.informationManager.mergeCounter;
 
         var peopleAmount = ResourceProvider.i.informationManager.peopleAmount;
@@ -234,10 +197,8 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private IEnumerator SetAddSlider()
+    public void SetAddSlider()
     {
-        yield return null;
-
         var sliderLevel = ResourceProvider.i.informationManager.sliderLevel;
 
         var sliderMaxLevel = ResourceProvider.i.addSliderBehavior.sliderList.Count - 1;
@@ -264,13 +225,11 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private IEnumerator SetAddGate()
+    public void SetAddGate()
     {
-        yield return null;
-
         var gateAmount = ResourceProvider.i.informationManager.gateCount;
 
-        var nowMaxGateAmount = ResourceProvider.i.gateList.nowGateMaxAmount;
+        var nowMaxGateAmount = gateList.nowGateMaxAmount;
 
         if (!ResourceProvider.i.moneyLimitController.canAddGateState
                                           || gateAmount >= nowMaxGateAmount)
