@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//広告撮影用スクリプト。背景を動かす。
 public class ImageMover : MonoBehaviour
 {
     [SerializeField]

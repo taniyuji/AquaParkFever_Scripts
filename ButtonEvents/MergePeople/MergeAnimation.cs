@@ -21,6 +21,8 @@ public class MergeAnimation : MonoBehaviour
 
     private SwimRingBehavior swimRing;
 
+    private Vector3 defaultRotation;
+
     void Awake()
     {
         follower = GetComponent<PathFollower>();
@@ -28,6 +30,8 @@ public class MergeAnimation : MonoBehaviour
         characterBehavior = GetComponent<CharacterBehavior>();
 
         swimRing = GetComponent<SwimRingBehavior>();
+
+        defaultRotation = transform.localEulerAngles;
     }
 
     //マージされる方かする方かで処理を分ける。
@@ -37,7 +41,7 @@ public class MergeAnimation : MonoBehaviour
         else StartCoroutine(Merge());
     }
     
-    //マージする方の場合の処理
+    //マージする方の処理
     //キャラをカメラ前まで動かしてキャラのレベルを上げて数秒後にスライダーに戻す。
     public IEnumerator Merge()
     {
@@ -47,23 +51,22 @@ public class MergeAnimation : MonoBehaviour
 
         var mergeTransform = ResourceProvider.i.mergeTransform;
 
-        var returnPosition = characterBehavior.state == CharacterBehavior.AnimationNames.OnSlider
-                     ? transform.position : ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition;
-
         trailRenderer.gameObject.SetActive(true);
 
         sequence.Append(transform.DOMove(mergeTransform[0].position, moveSpeed))
                 .Append(transform.DOMove(mergeTransform[2].position, moveSpeed).SetDelay(0.3f))
                 .AppendCallback(() => 
                 { 
-                    swimRing.SetSwimRing(characterBehavior.state);
+                    swimRing.SetSwimRing();
                     trailRenderer.gameObject.SetActive(false);
                 })
-                .Append(transform.DOMove(returnPosition, moveSpeed).SetDelay(0.5f))
+                .Append(transform.DOMove(ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition
+                                         ,moveSpeed).SetDelay(0.5f))
                 .AppendCallback(() =>
                 {
                     characterBehavior.enabled = true;
-                    
+                    transform.localEulerAngles = defaultRotation;
+
                     if (characterBehavior.state == CharacterBehavior.AnimationNames.OnSlider)
                     {
                         follower.enabled = true;

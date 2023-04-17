@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathCreation;
 
+//スライダーに関係する各オブジェクトを提供するスクリプト
 public class SliderResourceProvider : MonoBehaviour
 {
     [SerializeField]

@@ -1,13 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using System;
 using UnityEditor;
-using PathCreation.Examples;
 using PathCreation;
 using System.Linq;
 
+//エディットモードでもアクティブなスライダーによってカメラを切り替えられるスクリプト
 [ExecuteInEditMode]
 public class CameraPositionController : MonoBehaviour
 {
@@ -22,6 +20,7 @@ public class CameraPositionController : MonoBehaviour
     // Start is called before the first frame update
 
 
+/*
     void Update()
     {
         if (EditorApplication.isPlaying) return;
@@ -38,4 +37,5 @@ public class CameraPositionController : MonoBehaviour
 
         beforeSlider = targetSlider;
     }
+*/
 }

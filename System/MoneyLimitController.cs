@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 
+//各ボタンの消費金額を操作するスクリプト
 public class MoneyLimitController : MonoBehaviour
 {
     private Subject<bool> _stateChanged = new Subject<bool>();
@@ -99,6 +100,7 @@ public class MoneyLimitController : MonoBehaviour
 
     void Start()
     {
+        //所持金額の変更に沿ってボタンの状態を変化させる。
         ResourceProvider.i.informationManager.moneyAmountChanged.Subscribe(i =>
         {
             canAddPeopleState = i >= addPeopleLimit;

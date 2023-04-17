@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
-using System;
-using UnityEditor;
-using PathCreation.Examples;
-using PathCreation;
-using System.Linq;
+using DG.Tweening;
+
+//ゲーム中のカメラ移動を制御するスクリプト
 public class CameraPositionMover : MonoBehaviour
 {
     [SerializeField]
     private List<Transform> positionList;
+
+    [SerializeField]
+    private float cameraMoveSpeed = 0.5f;
 
     public void ChangePosition(int index)
     {
@@ -18,7 +18,7 @@ public class CameraPositionMover : MonoBehaviour
 
         //Debug.Log(i);
 
-        transform.position = positionList[index].position;
+        transform.DOMove(positionList[index].position, cameraMoveSpeed);
     }
 
     void Start()

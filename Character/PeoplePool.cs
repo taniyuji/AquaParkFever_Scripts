@@ -22,6 +22,8 @@ public class PeoplePool : MonoBehaviour
         get { return _peopleList; }
     }
 
+    public Vector3 peopleDefaultRotation { get; private set; }
+
     void Awake()
     {
         peoplePrefab.gameObject.SetActive(false);
@@ -34,6 +36,8 @@ public class PeoplePool : MonoBehaviour
 
             _peopleList.Add(instantiatedPeople);
         }
+
+        peopleDefaultRotation = peoplePrefab.transform.localEulerAngles;
     }
 
     //AddPeopleで次に出現させるキャラを取得する。

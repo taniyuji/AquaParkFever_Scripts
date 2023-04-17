@@ -18,6 +18,8 @@ public class AddPeopleBehavior : MonoBehaviour
 
     private AudioSource appearSE;
 
+    private Vector3 peopleDefaultRotation;
+
     void Awake()
     {
         appearSE = GetComponent<AudioSource>();
@@ -29,6 +31,9 @@ public class AddPeopleBehavior : MonoBehaviour
         appearSE.PlayOneShot(appearSE.clip);
 
         var InstantiatedCharacter = ResourceProvider.i.peoplePool.GetNextPeople();
+
+        InstantiatedCharacter.transform.localEulerAngles
+             = ResourceProvider.i.peoplePool.peopleDefaultRotation;
 
         //連打でキャラを生成しても一定の感覚を保たせる。
         //１つ前のキャラ生成から0.5秒経っていない場合は対象のキャラを待機状態にさせる。

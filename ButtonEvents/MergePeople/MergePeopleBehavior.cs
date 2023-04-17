@@ -18,13 +18,16 @@ public class MergePeopleBehavior : MonoBehaviour
                                                 .GetComponent<CharacterBehavior>();
 
         if (target != null)
-        {
+        {   
+            //マージする側としてマージを実行
             target.SetMerge(false);
 
+            //マージされる側のキャラを取得する。
             var mergedPeople = peoplePool.peopleList.Where(i => i.gameObject.activeSelf)
                                         .LastOrDefault()
                                         .GetComponent<CharacterBehavior>();
-
+                                        
+            //マージされる側としてマージを実行
             mergedPeople.SetMerge(true);
         }
     }

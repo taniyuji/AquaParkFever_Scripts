@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//ランダムなマテリアルをメッシュに適応するスクリプト
 public class GetRandomMaterial : MonoBehaviour
 {
     [SerializeField]

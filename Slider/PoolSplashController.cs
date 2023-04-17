@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//キャラがプールに飛び込んだ際の水飛沫エフェクトを管理するスクリプト
 public class PoolSplashController : MonoBehaviour
 {
     [SerializeField]

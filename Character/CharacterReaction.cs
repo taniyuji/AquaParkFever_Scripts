@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+//広告用の演出を管理するスクリプト。
 public class CharacterReaction : MonoBehaviour
 {
     [SerializeField]

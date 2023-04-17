@@ -5,6 +5,7 @@ using DG.Tweening;
 using PathCreation.Examples;
 using UnityEngine.Animations;
 
+//キャラの出現時のアニメーションを制御するスクリプト
 public class AppearAnimation : MonoBehaviour
 {
     [SerializeField]
@@ -13,9 +14,6 @@ public class AppearAnimation : MonoBehaviour
     [SerializeField]
     private float addScaleAmount;
 
-    [SerializeField]
-    private List<ParentConstraint> constraintsList;
-
     private CharacterBehavior behavior;
 
     private PathFollower follower;
@@ -23,6 +21,8 @@ public class AppearAnimation : MonoBehaviour
     private Sequence sequence;
 
     private Vector3 defaultScale;
+
+    private Vector3 defaultRotation;
 
     void Awake()
     {
@@ -34,38 +34,19 @@ public class AppearAnimation : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         sequence = DOTween.Sequence();
 
-        var entrancePosition = ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition;
-
-        var rowInterval = ResourceProvider.i.waitRow.rowInterval;
-
         //Debug.Log(rowInterval);
 
-        if (constraintsList.Count != 0)
-        {
-            for (int i = 0; i < constraintsList.Count; i++)
-                constraintsList[i].weight = 0;
-        }
-
-        sequence.Append(transform.DOScale(new Vector3(defaultScale.x + addScaleAmount,
-                                                        defaultScale.y + addScaleAmount,
-                                                        defaultScale.z + addScaleAmount)
-                                                        , animationSpeed / 2))
+        sequence.Append(transform.DOScale(defaultScale + Vector3.one * addScaleAmount, animationSpeed / 2))
                 .Append(transform.DOScale(defaultScale, animationSpeed / 2))
                 .AppendCallback(() =>
                 {
                     //Debug.Log(defaultScale);
 
                     behavior.enabled = true;
-
-                    if (constraintsList.Count != 0)
-                    {
-                        for (int i = 0; i < constraintsList.Count; i++)
-                            constraintsList[i].weight = 1;
-                    }
                 });
     }
 }

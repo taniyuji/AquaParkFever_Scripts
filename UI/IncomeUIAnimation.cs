@@ -5,6 +5,7 @@ using TMPro;
 using DG.Tweening;
 using System.Linq;
 
+//ゲートを通った際のドルUIのアニメーションを制御するスクリプト
 public class IncomeUIAnimation : MonoBehaviour
 {
     [SerializeField]

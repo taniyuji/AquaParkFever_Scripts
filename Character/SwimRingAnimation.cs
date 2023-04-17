@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
+//マージ時の浮き輪アニメーションを制御するスクリプト
 public class SwimRingAnimation : MonoBehaviour
 {
     [SerializeField]

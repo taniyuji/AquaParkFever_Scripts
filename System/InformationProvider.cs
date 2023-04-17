@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 
+//ゲームの各情報を管理するスクリプト
 public class InformationProvider : MonoBehaviour
 {
     [SerializeField]
@@ -54,18 +55,20 @@ public class InformationProvider : MonoBehaviour
         gateCount += defaultGateAmount;
     }
 
+    //お金を増やす処理。引数で渡されるキャラのレベルによって増やす値段を変える。
     public void AddDollar(int i)
     {
         if (i == 1) moneyAmount++;
         else moneyAmount += (i - 1) * 5;
-
+        //所持金額が増えたことを通知
         _moneyAmountChanged.OnNext(moneyAmount);
     }
 
+    //お金を使う処理。引数で渡された額を引く。
     public void UseDollar(int i)
     {
         moneyAmount -= i;
-
+        //所持金額が減ったことを通知
         _moneyAmountChanged.OnNext(moneyAmount);
     }
 

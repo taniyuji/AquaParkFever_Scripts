@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//デバッグ用のシーンリセット機能
 public class ResetButton : MonoBehaviour
 {
     [SerializeField]
     private int sceneNumber;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space)) SceneManager.LoadScene(sceneNumber);

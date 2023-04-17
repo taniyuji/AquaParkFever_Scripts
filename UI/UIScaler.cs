@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//ボタンクリック時のスケールを変化させるスクリプト
 public class UIScaler : MonoBehaviour
 {
     private RectTransform rectTransform;
@@ -19,15 +20,11 @@ public class UIScaler : MonoBehaviour
 
     private IEnumerator Scale()
     {
-        transform.localScale = new Vector3(rectTransform.localScale.x - 0.2f,
-                                           rectTransform.localScale.y - 0.2f,
-                                           rectTransform.localScale.z - 0.2f);
+        transform.localScale = rectTransform.localScale - Vector3.one * 0.2f;
 
         yield return new WaitForSeconds(0.1f);
 
-        transform.localScale = new Vector3(rectTransform.localScale.x + 0.2f,
-                                           rectTransform.localScale.y + 0.2f,
-                                           rectTransform.localScale.z + 0.2f);
+        transform.localScale = rectTransform.localScale + Vector3.one * 0.2f;
     }
 }
 

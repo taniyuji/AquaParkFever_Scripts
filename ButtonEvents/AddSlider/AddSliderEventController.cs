@@ -43,9 +43,9 @@ public class AddSliderEventController : MonoBehaviour
         addSliderBehavior.SetSlider(sliderLevel);
         ResourceProvider.i.waitRow.ChangeYPosition();
         ResourceProvider.i.moneyLimitController.IncreaseAddSliderCost();
-        ResourceProvider.i.UIController.SetAddPeople();
-        ResourceProvider.i.UIController.SetAddGate();
-        ResourceProvider.i.UIController.SetAddSlider();
+        ResourceProvider.i.UIController.SetAddPeopleButton();
+        ResourceProvider.i.UIController.SetAddGateButton();
+        ResourceProvider.i.UIController.SetAddSliderButton();
 
         addSliderSubject.OnNext(informationManager.sliderLevel);
         //Debug.Log(sliderLevel);

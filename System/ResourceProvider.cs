@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+
+//各コンポーネントを動的に提供するスクリプト
+//主にキャラやスライダーなどゲーム状況によって所持する情報が動的に変化するオブジェクトに情報を提供する
 public class ResourceProvider : MonoBehaviour
 {
     public static ResourceProvider i { get; private set; }

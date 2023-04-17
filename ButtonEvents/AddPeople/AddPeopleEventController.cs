@@ -26,8 +26,8 @@ public class AddPeopleEventController : MonoBehaviour
 
         addPeopleBehavior.AddPeople();
         ResourceProvider.i.moneyLimitController.IncreaseAddPeopleCost();
-        ResourceProvider.i.UIController.SetAddPeople();
-        ResourceProvider.i.UIController.SetMergePeople();
+        ResourceProvider.i.UIController.SetAddPeopleButton();
+        ResourceProvider.i.UIController.SetMergePeopleButton();
 
         //Debug.Log(peopleAmount);
     }

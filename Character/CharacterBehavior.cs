@@ -6,6 +6,7 @@ using System;
 using PathCreation.Examples;
 using DG.Tweening;
 
+//キャラクターの動作を制御するスクリプト
 public class CharacterBehavior : MonoBehaviour
 {
     [SerializeField]
@@ -63,10 +64,6 @@ public class CharacterBehavior : MonoBehaviour
         animator = GetComponent<Animator>();
         mergeAnimation = GetComponent<MergeAnimation>();
         poolLadderTransform = ResourceProvider.i.poolLadderTransform;
-        climbLadderPosition = ResourceProvider.i.addSliderBehavior.nowClimbLadderPosition;
-        basePosition = ResourceProvider.i.addSliderBehavior.nowBaseBackPosition;
-        sliderPosition = ResourceProvider.i.addSliderBehavior.nowSliderEntrancePosition;
-        sliderJumpPosition = ResourceProvider.i.addSliderBehavior.nowSliderJumpPosition;
     }
 
     void OnEnable()
@@ -74,14 +71,17 @@ public class CharacterBehavior : MonoBehaviour
         isMerged = false;
         follower.enabled = false;
 
+        //列に待機している他のキャラがいるかどうか
         if (!ResourceProvider.i.waitRow.isWaiting)
         {
+            //いない場合はスライダーを滑り始める
             GoSlideBehavior();
 
             //Debug.Log("enabledAgain&GoSlider" + gameObject.name);
         }
         else
         {
+            //いた場合は待機列に追加する。
             SetRowWaiting();
 
             //Debug.Log("enabledAgain&waitRow" + gameObject.name);
@@ -90,6 +90,7 @@ public class CharacterBehavior : MonoBehaviour
 
     void Start()
     {
+        //全てのパスを滑り終わった場合、プール落下処理を開始する。
         follower.getEndOfPath.Subscribe(i =>
         {
             if (sequence == null || !sequence.IsPlaying())
@@ -99,6 +100,7 @@ public class CharacterBehavior : MonoBehaviour
             }
         });
 
+        //スライダーのレベルが上がった場合待機列の位置を移動する。
         ResourceProvider.i.addSliderEventController.SliderLevelChanged.Subscribe((Action<int>)(i =>
         {
             if (sequence != null && sequence.IsPlaying())
@@ -107,12 +109,14 @@ public class CharacterBehavior : MonoBehaviour
             }
         }));
 
+        //待機列から滑り始めるキャラをそのFollowerとともに通知する
         ResourceProvider.i.waitRow.goSlide.Subscribe(i =>
         {
             if (!isWaiting) return;
 
             if (isMerged) return;
 
+            //通知されたFollowerが自分自身のものでなかった場合は列を進む
             if (i != follower)
             {
                 PlayAnimation(AnimationNames.Run);
@@ -127,13 +131,14 @@ public class CharacterBehavior : MonoBehaviour
 
                 sequence.Append(transform.DOMove(transform.position + rowInterval, 0.4f).SetDelay(0.3f));
             }
-            else
+            else//Followerが自分自身だった場合滑り始める。
             {
                 GoSlideBehavior();
             }
         });
     }
 
+    //待機列追加処理
     public void SetRowWaiting()
     {
         isWaiting = true;
@@ -174,6 +179,7 @@ public class CharacterBehavior : MonoBehaviour
 
     }
 
+    //プール落下から梯子を登り切るまでの処理
     void FromFallPoolBehavior()
     {
         basePosition = ResourceProvider.i.addSliderBehavior.nowBaseBackPosition;
@@ -196,6 +202,7 @@ public class CharacterBehavior : MonoBehaviour
 
         PlayAnimation(AnimationNames.FallPool);
 
+                //プールに潜ってから上がるまでの処理
         sequence.Append(transform.DOMove(new Vector3(defaultX + 1f, defaultY - 3, defaultZ), moveSpeed))
                 .Append(transform.DOMove(new Vector3(defaultX + 1f, poolLadderTransform.position.y, defaultZ), moveSpeed))
                 .AppendCallback(() =>
@@ -203,6 +210,7 @@ public class CharacterBehavior : MonoBehaviour
                     PlayAnimation(AnimationNames.Swim);
                     transform.LookAt(poolLadderTransform);
                 })
+                //プールの梯子まで泳ぐ処理
                 .Append(transform.DOMove(poolLadderTransform.position, moveSpeed * 4).SetEase(Ease.InSine))
                 .AppendCallback(() =>
                  {
@@ -212,20 +220,25 @@ public class CharacterBehavior : MonoBehaviour
                      transform.LookAt(new Vector3(slider.x, climbLadderPosition.y, slider.z));
 
                  })
+                 //スライダーの足場まで登る処理
                  .Append(transform.DOMove(basePosition, 2f).SetEase(Ease.InSine))
                  .AppendCallback(() =>
                   {
+                      //待機している他のキャラがいた場合飛び込み口までは進まず待機列に並ぶ。
                       if (ResourceProvider.i.waitRow.isWaiting)
                       {
                           SetRowWaiting();
+                    
                       }
 
                       PlayAnimation(AnimationNames.Run);
                       transform.position = new Vector3(transform.position.x, sliderPosition.y, transform.position.z);
                   })
+                  //スライダーの飛び込む口まで進む処理
                   .Append(transform.DOMove(sliderPosition, 1f).SetEase(Ease.InSine))
                   .AppendCallback(() =>
                   {
+                      //他に待機しているキャラがいた場合は待機列へ。それ以外は飛び込む。
                       if (ResourceProvider.i.waitRow.isWaiting)
                       {
                           SetRowWaiting();
@@ -247,16 +260,19 @@ public class CharacterBehavior : MonoBehaviour
 
         OnSliderEffect.gameObject.SetActive(name == AnimationNames.OnSlider);
 
+        //滑るアニメーションじゃない場合は他に滑っている人がいない確認する処理を実行する。
         if (name != AnimationNames.OnSlider)
         {
             ResourceProvider.i.peoplePool.CheckNoOneOnSlider();
         }
         else
         {
+            //滑るアニメーションの場合は滑っている効果音をプレイする。
             ResourceProvider.i.peoplePool.playSE();
         }
     }
 
+    //マージ対象に選ばれた時の処理。各パラメータをリセットしてマージアニメーションを呼び出す。
     public void SetMerge(bool isBeMerged)
     {
         sequence.Kill();

@@ -6,6 +6,7 @@ using System;
 using UniRx;
 using TMPro;
 
+//各ボタンUIやドルUIを制御するスクリプト
 public class UIController : MonoBehaviour
 {
     [SerializeField]
@@ -48,14 +49,16 @@ public class UIController : MonoBehaviour
 
         UnSetButton(FunctionName.Income);
 
+        //各ボタンの消費金額の変化に沿ってボタンUIの表示も変化させる。
         ResourceProvider.i.moneyLimitController.stateChanged.Subscribe(i =>
         {
-            SetAddPeople();
-            SetMergePeople();
-            SetAddSlider();
-            SetAddGate();
+            SetAddPeopleButton();
+            SetMergePeopleButton();
+            SetAddSliderButton();
+            SetAddGateButton();
         });
 
+        //所持金額の増減によって各ボタンUIの表示も変化させる。
         ResourceProvider.i.informationManager.moneyAmountChanged.Subscribe(i =>
         {
             dollarUI.text = i + "$";
@@ -130,14 +133,7 @@ public class UIController : MonoBehaviour
         buttons[(int)name].enabled = true;
     }
 
-    private void SetCoroutine(FunctionName name)
-    {
-        IEnumerator method = null;
-
-        StartCoroutine(method);
-    }
-
-    public void SetAddPeople()
+    public void SetAddPeopleButton()
     {
         var informationManager = ResourceProvider.i.informationManager;
 
@@ -169,7 +165,7 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void SetMergePeople()
+    public void SetMergePeopleButton()
     {
         var mergeCounter = ResourceProvider.i.informationManager.mergeCounter;
 
@@ -197,7 +193,7 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void SetAddSlider()
+    public void SetAddSliderButton()
     {
         var sliderLevel = ResourceProvider.i.informationManager.sliderLevel;
 
@@ -225,7 +221,7 @@ public class UIController : MonoBehaviour
         }
     }
 
-    public void SetAddGate()
+    public void SetAddGateButton()
     {
         var gateAmount = ResourceProvider.i.informationManager.gateCount;
 

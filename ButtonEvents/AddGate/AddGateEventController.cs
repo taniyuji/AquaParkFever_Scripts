@@ -23,8 +23,8 @@ public class AddGateEventController : MonoBehaviour
 
         gateList.nowGateController.AddGate(informationManager.gateCount);
         ResourceProvider.i.moneyLimitController.IncreaseAddGateCost();
-        ResourceProvider.i.UIController.SetMergePeople();
-        ResourceProvider.i.UIController.SetAddGate();
+        ResourceProvider.i.UIController.SetMergePeopleButton();
+        ResourceProvider.i.UIController.SetAddGateButton();
         //Debug.Log(mergeCount);
     }
 }

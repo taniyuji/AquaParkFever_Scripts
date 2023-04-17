@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PathCreation.Examples;
 
+//キャラの滑るスピードを変化させるスクリプト
 public class ChangeSpeed : MonoBehaviour
 {
     [SerializeField]
@@ -24,12 +25,13 @@ public class ChangeSpeed : MonoBehaviour
 
     private SpeedState state;
 
+    //スピードを変化させるコライダーにヒットすると速度が変化
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("SpeedUp")) state = SpeedState.Up;
         else if (other.gameObject.CompareTag("SpeedDown")) state = SpeedState.Down;
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         state = SpeedState.Idle;
@@ -46,6 +48,7 @@ public class ChangeSpeed : MonoBehaviour
 
         if(follower == null) follower = GetComponent<PathFollower>();
 
+        //素の速度に戻ったら速度変化処理を終了する
         if (follower.speed < defaultSpeed)
         {
             follower.speed = defaultSpeed;
